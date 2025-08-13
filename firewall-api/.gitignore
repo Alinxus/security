@@ -1,0 +1,67 @@
+node_modules
+
+# Environment variables
+.env
+.env.example
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Source maps
+*.map
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+dev.db
+test.db
+database.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Cache directories
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Generated Prisma files
+/src/generated/prisma
+
+# Smart contract artifacts
+artifacts/
+cache/
+typechain-types/
+coverage/
+coverage.json
+gasReporterOutput.json
+
+# Hardhat files
+.openzeppelin/

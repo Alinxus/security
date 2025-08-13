@@ -1,0 +1,84 @@
+// Transaction Firewall Database Schema
+// AI-powered transaction security for Base blockchain
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ScamAddress {
+  id          String   @id @default(cuid())
+  address     String   @unique @db.VarChar(42)
+  riskLevel   Int      @default(0) @map("risk_level")
+  description String?
+  reportedAt  DateTime @default(now()) @map("reported_at")
+  source      String?  @db.VarChar(255)
+  tags        String[]
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("scam_addresses")
+  @@index([address])
+  @@index([riskLevel])
+}
+
+model UserTransaction {
+  id              String   @id @default(cuid())
+  userAddress     String   @map("user_address") @db.VarChar(42)
+  txHash          String?  @map("tx_hash") @db.VarChar(66)
+  riskScore       Int      @map("risk_score")
+  blocked         Boolean  @default(false)
+  transactionData Json     @map("transaction_data")
+  analysisData    Json     @map("analysis_data")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("user_transactions")
+  @@index([userAddress])
+  @@index([createdAt])
+  @@index([riskScore])
+}
+
+model UserSecurityScore {
+  userAddress          String        @id @map("user_address") @db.VarChar(42)
+  currentScore         Int           @default(100) @map("current_score")
+  transactionsAnalyzed Int           @default(0) @map("transactions_analyzed")
+  threatsBlocked       Int           @default(0) @map("threats_blocked")
+  lastActive           DateTime      @default(now()) @map("last_active")
+  achievements         Json          @default("[]")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+  
+  @@map("user_security_scores")
+}
+
+model ContractInfo {
+  id         String    @id @default(cuid())
+  address    String    @unique @db.VarChar(42)
+  isContract Boolean   @default(false) @map("is_contract")
+  sourceCode String?   @map("source_code")
+  abi        Json?
+  verified   Boolean   @default(false)
+  createdAt  DateTime? @map("created_at")
+  creator    String?   @db.VarChar(42)
+  name       String?   @db.VarChar(255)
+  cachedAt   DateTime  @default(now()) @map("cached_at")
+
+  @@map("contract_info")
+  @@index([address])
+  @@index([cachedAt])
+}
+
+model RiskPattern {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(255)
+  description String?
+  pattern     String
+  riskScore   Int      @map("risk_score")
+  category    String?  @db.VarChar(100)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("risk_patterns")
+}
